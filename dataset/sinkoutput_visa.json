@@ -1,0 +1,25 @@
+{
+	"name": "sinkoutput_visa",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Linkservicedatalake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "dataflowoutput_visa",
+				"folderPath": "csvfile",
+				"fileSystem": "reporting"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

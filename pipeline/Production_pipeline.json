@@ -1,0 +1,49 @@
+{
+	"name": "Production_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Extract_Source_data",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "sale_test_job",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Transform_load",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Extract_Source_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "metadata_pipeline",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2025-04-28T09:48:48Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

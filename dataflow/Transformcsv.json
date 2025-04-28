@@ -1,0 +1,103 @@
+{
+	"name": "Transformcsv",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "data_flow_csv",
+						"type": "DatasetReference"
+					},
+					"name": "sourcecsv"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sinkoutput_visa",
+						"type": "DatasetReference"
+					},
+					"name": "sink"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkmastercard"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectcolumn"
+				},
+				{
+					"name": "filterdata"
+				},
+				{
+					"name": "splitdata",
+					"description": "Conditionally distributing the data in payment groups"
+				},
+				{
+					"name": "removenull"
+				},
+				{
+					"name": "aggregate"
+				},
+				{
+					"name": "Nullcheck"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          transaction_id as short,",
+				"          transactional_date as timestamp,",
+				"          product_id as string,",
+				"          customer_id as short,",
+				"          payment as string,",
+				"          credit_card as long,",
+				"          loyalty_card as boolean,",
+				"          cost as double,",
+				"          quantity as short,",
+				"          price as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourcecsv",
+				"sourcecsv select(mapColumn(",
+				"          transaction_id,",
+				"          transactional_date,",
+				"          product_id,",
+				"          customer_id,",
+				"          payment,",
+				"          quantity,",
+				"          price",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectcolumn",
+				"selectcolumn filter(customer_id != 12) ~> filterdata",
+				"filterdata split(payment=='visa',",
+				"     payment=='americanexpress',",
+				"     disjoint: false) ~> splitdata@(visa, americanexpress, mastercard)",
+				"splitdata@mastercard derive(payment = coalesce(payment,'NA')) ~> removenull",
+				"splitdata@visa aggregate(product_id = max(product_id)) ~> aggregate",
+				"aggregate alterRow(insertIf(!isNull(product_id))) ~> Nullcheck",
+				"Nullcheck sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink",
+				"removenull sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkmastercard"
+			]
+		}
+	}
+}
