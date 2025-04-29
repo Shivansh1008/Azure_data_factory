@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "Data-Pipeline01"
+		},
+		"Linkservicedatalake_accountKey": {
+			"value": ""
+		},
+		"Linkservicedatalake_properties_typeProperties_url": {
+			"value": "https://storagedatalakepractice.dfs.core.windows.net/"
+		},
+		"trigger_storage_properties_typeProperties_scope": {
+			"value": "/subscriptions/f558b25c-533d-45de-b244-eb2067676c14/resourceGroups/Group1/providers/Microsoft.Storage/storageAccounts/storagedatalakepractice"
+		}
+	}
+}

@@ -1,0 +1,63 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "Data-Pipeline01"
+		},
+		"Linkservicedatalake_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Linkservicedatalake'"
+		},
+		"Linkservicedatalake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://storagedatalakepractice.dfs.core.windows.net/"
+		},
+		"trigger_storage_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/f558b25c-533d-45de-b244-eb2067676c14/resourceGroups/Group1/providers/Microsoft.Storage/storageAccounts/storagedatalakepractice"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "Data-Pipeline01_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Linkservicedatalake_accountKey": {
+						"value": "[parameters('Linkservicedatalake_accountKey')]"
+					},
+					"Linkservicedatalake_properties_typeProperties_url": {
+						"value": "[parameters('Linkservicedatalake_properties_typeProperties_url')]"
+					},
+					"trigger_storage_properties_typeProperties_scope": {
+						"value": "[parameters('trigger_storage_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
