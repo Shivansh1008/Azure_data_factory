@@ -1565,6 +1565,18 @@
 				"[concat(variables('factoryId'), '/datasets/sinkoutput_visa')]",
 				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
 		}
 	]
 }
