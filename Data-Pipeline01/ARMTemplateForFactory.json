@@ -144,7 +144,7 @@
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "Get Metadata1",
+									"name": "Get_Metadata1",
 									"type": "GetMetadata",
 									"dependsOn": [],
 									"policy": {
@@ -185,7 +185,7 @@
 									"type": "IfCondition",
 									"dependsOn": [
 										{
-											"activity": "Get Metadata1",
+											"activity": "Get_Metadata1",
 											"dependencyConditions": [
 												"Succeeded"
 											]
@@ -194,7 +194,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"expression": {
-											"value": "@greater(formatDateTime(activity('Get Metadata').output.lastModified,'yyyymmddHHmmss'),formatDateTime(variables('temporary_max_value'),'yyyymmddHHmmss'))",
+											"value": "@greater(formatDateTime(activity('Get_Metadata1').output.lastModified,'yyyymmddHHmmss'),formatDateTime(variables('temporary_max_value'),'yyyymmddHHmmss'))",
 											"type": "Expression"
 										},
 										"ifTrueActivities": [
@@ -210,7 +210,7 @@
 												"typeProperties": {
 													"variableName": "temporary_max_value",
 													"value": {
-														"value": "@activity('Get Metadata1').output.lastModified",
+														"value": "@activity('Get_Metadata1').output.lastModified",
 														"type": "Expression"
 													}
 												}
@@ -328,10 +328,11 @@
 				"variables": {
 					"temporary_max_value": {
 						"type": "String",
-						"defaultValue": "2000-01-01 "
+						"defaultValue": "2000-01-01T00:00:00Z"
 					},
 					"max_value": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "2000-01-01T00:00:00Z"
 					}
 				},
 				"annotations": []
@@ -919,7 +920,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": {
+						"fileName": {
 							"value": "@dataset().p_file_name",
 							"type": "Expression"
 						},
