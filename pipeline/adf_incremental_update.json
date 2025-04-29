@@ -51,7 +51,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Metadata').output.childItems",
+						"value": "@activity('Get Metadata1').output.childItems",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -241,7 +241,8 @@
 				"defaultValue": "2000-01-01T00:00:00Z"
 			},
 			"max_value": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "2000-01-01T00:00:00Z"
 			}
 		},
 		"annotations": []
