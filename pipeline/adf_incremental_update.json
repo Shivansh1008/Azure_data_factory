@@ -51,13 +51,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Metadata1').output.childItems",
+						"value": "@activity('Get Metadata').output.childItems",
 						"type": "Expression"
 					},
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Get Metadata1",
+							"name": "Get_Metadata1",
 							"type": "GetMetadata",
 							"dependsOn": [],
 							"policy": {
@@ -98,7 +98,7 @@
 							"type": "IfCondition",
 							"dependsOn": [
 								{
-									"activity": "Get Metadata1",
+									"activity": "Get_Metadata1",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -107,7 +107,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@greater(formatDateTime(activity('Get Metadata').output.lastModified,'yyyymmddHHmmss'),formatDateTime(variables('temporary_max_value'),'yyyymmddHHmmss'))",
+									"value": "@greater(formatDateTime(activity('Get_Metadata1').output.lastModified,'yyyymmddHHmmss'),formatDateTime(variables('temporary_max_value'),'yyyymmddHHmmss'))",
 									"type": "Expression"
 								},
 								"ifTrueActivities": [
