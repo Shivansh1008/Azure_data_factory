@@ -123,7 +123,7 @@
 										"typeProperties": {
 											"variableName": "temporary_max_value",
 											"value": {
-												"value": "@activity('Get Metadata1').output.lastModified",
+												"value": "@activity('Get_Metadata1').output.lastModified",
 												"type": "Expression"
 											}
 										}
