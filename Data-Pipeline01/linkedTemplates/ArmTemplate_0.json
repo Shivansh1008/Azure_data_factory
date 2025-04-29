@@ -14,10 +14,6 @@
 		"Linkservicedatalake_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://storagedatalakepractice.dfs.core.windows.net/"
-		},
-		"trigger_storage_properties_typeProperties_scope": {
-			"type": "string",
-			"defaultValue": "/subscriptions/f558b25c-533d-45de-b244-eb2067676c14/resourceGroups/Group1/providers/Microsoft.Storage/storageAccounts/storagedatalakepractice"
 		}
 	},
 	"variables": {
@@ -869,6 +865,59 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/freshfiles')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "data_lake_param_container_level",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_container": "adfrealtimestorage"
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"modifiedDatetimeStart": {
+									"value": "@adddays(utcNow(),-1)",
+									"type": "Expression"
+								},
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/data_lake_param_container_level')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/sale_test_job')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1472,45 +1521,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/metadata_pipeline')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/trigger_storage')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "sale_test_job",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "Production_pipeline",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/source/blobs/csvfiles/Fact_Sales",
-					"blobPathEndsWith": ".csv",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('trigger_storage_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/sale_test_job')]",
-				"[concat(variables('factoryId'), '/pipelines/Production_pipeline')]"
 			]
 		}
 	]
