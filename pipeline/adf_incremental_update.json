@@ -27,6 +27,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"modifiedDatetimeStart": null,
 						"modifiedDatetimeEnd": null,
 						"enablePartitionDiscovery": false
@@ -72,7 +73,7 @@
 									"referenceName": "data_lake_param_file_level",
 									"type": "DatasetReference",
 									"parameters": {
-										"p_container_name": "adfrealtimestaoragedestination",
+										"p_container_name": "adfrealtimestorage",
 										"p_file_name": {
 											"value": "@item().name",
 											"type": "Expression"
@@ -84,6 +85,7 @@
 								],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
