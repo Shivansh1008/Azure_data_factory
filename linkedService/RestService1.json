@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "https://movies-ratings2.p.rapidapi.com/ratings",
+			"url": "https://movies-ratings2.p.rapidapi.com/ratings?id=tt0111161",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
