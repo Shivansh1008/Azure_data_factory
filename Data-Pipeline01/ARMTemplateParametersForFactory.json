@@ -11,6 +11,9 @@
 		"Linkservicedatalake_properties_typeProperties_url": {
 			"value": "https://storagedatalakepractice.dfs.core.windows.net/"
 		},
+		"RestService1_properties_typeProperties_url": {
+			"value": "https://movies-ratings2.p.rapidapi.com/ratings?id=tt0111161"
+		},
 		"trigger_storage_properties_typeProperties_scope": {
 			"value": "/subscriptions/f558b25c-533d-45de-b244-eb2067676c14/resourceGroups/Group1/providers/Microsoft.Storage/storageAccounts/storagedatalakepractice"
 		}

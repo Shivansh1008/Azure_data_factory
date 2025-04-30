@@ -15,6 +15,10 @@
 			"type": "string",
 			"defaultValue": "https://storagedatalakepractice.dfs.core.windows.net/"
 		},
+		"RestService1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://movies-ratings2.p.rapidapi.com/ratings?id=tt0111161"
+		},
 		"trigger_storage_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/f558b25c-533d-45de-b244-eb2067676c14/resourceGroups/Group1/providers/Microsoft.Storage/storageAccounts/storagedatalakepractice"
@@ -81,6 +85,431 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/sale_test_job')]",
 				"[concat(variables('factoryId'), '/pipelines/metadata_pipeline')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Rest_api_pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"additionalHeaders": {
+									"x-rapidapi-key": "429ad88546mshb8f930b23d3a5f9p120a63jsna67c407ed2f3",
+									"x-rapidapi-host": "movies-ratings2.p.rapidapi.com"
+								},
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['tmdbId']"
+										},
+										"sink": {
+											"name": "tmdbId"
+										}
+									},
+									{
+										"source": {
+											"path": "$['imdbId']"
+										},
+										"sink": {
+											"name": "imdbId"
+										}
+									},
+									{
+										"source": {
+											"path": "$['lastUpdated']"
+										},
+										"sink": {
+											"name": "lastUpdated"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['imdb']['score']"
+										},
+										"sink": {
+											"name": "ratings_imdb_score"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['imdb']['reviewsCount']"
+										},
+										"sink": {
+											"name": "reviewsCount"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['imdb']['url']"
+										},
+										"sink": {
+											"name": "ratings_imdb_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['metacritic']['metascore']"
+										},
+										"sink": {
+											"name": "metascore"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['metacritic']['userScore']"
+										},
+										"sink": {
+											"name": "userScore"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['metacritic']['averageScore']"
+										},
+										"sink": {
+											"name": "ratings_metacritic_averageScore"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['metacritic']['url']"
+										},
+										"sink": {
+											"name": "ratings_metacritic_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['rotten_tomatoes']['tomatometer']"
+										},
+										"sink": {
+											"name": "tomatometer"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['rotten_tomatoes']['tomatometerReviewsCount']"
+										},
+										"sink": {
+											"name": "tomatometerReviewsCount"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['rotten_tomatoes']['audienceScore']"
+										},
+										"sink": {
+											"name": "audienceScore"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['rotten_tomatoes']['audienceScoreReviewsCount']"
+										},
+										"sink": {
+											"name": "audienceScoreReviewsCount"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['rotten_tomatoes']['averageScore']"
+										},
+										"sink": {
+											"name": "ratings_rotten_tomatoes_averageScore"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['rotten_tomatoes']['url']"
+										},
+										"sink": {
+											"name": "ratings_rotten_tomatoes_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['letterboxd']['score']"
+										},
+										"sink": {
+											"name": "ratings_letterboxd_score"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['letterboxd']['url']"
+										},
+										"sink": {
+											"name": "ratings_letterboxd_url"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['allocine']"
+										},
+										"sink": {
+											"name": "allocine",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ratings']['average']['score']"
+										},
+										"sink": {
+											"name": "ratings_average_score"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['backdrop_path']"
+										},
+										"sink": {
+											"name": "backdrop_path"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['budget']"
+										},
+										"sink": {
+											"name": "budget"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['homepage']"
+										},
+										"sink": {
+											"name": "homepage"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['id']"
+										},
+										"sink": {
+											"name": "media_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['imdb_id']"
+										},
+										"sink": {
+											"name": "media_imdb_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['original_language']"
+										},
+										"sink": {
+											"name": "original_language"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['original_title']"
+										},
+										"sink": {
+											"name": "original_title"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['overview']"
+										},
+										"sink": {
+											"name": "overview"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['popularity']"
+										},
+										"sink": {
+											"name": "popularity"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['poster_path']"
+										},
+										"sink": {
+											"name": "poster_path"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['release_date']"
+										},
+										"sink": {
+											"name": "release_date"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['revenue']"
+										},
+										"sink": {
+											"name": "revenue"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['runtime']"
+										},
+										"sink": {
+											"name": "runtime"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['status']"
+										},
+										"sink": {
+											"name": "status"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['tagline']"
+										},
+										"sink": {
+											"name": "tagline"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['title']"
+										},
+										"sink": {
+											"name": "title"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['video']"
+										},
+										"sink": {
+											"name": "video"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['external_ids']['imdb_id']"
+										},
+										"sink": {
+											"name": "media_external_ids_imdb_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['external_ids']['wikidata_id']"
+										},
+										"sink": {
+											"name": "wikidata_id"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['external_ids']['facebook_id']"
+										},
+										"sink": {
+											"name": "facebook_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['external_ids']['instagram_id']"
+										},
+										"sink": {
+											"name": "instagram_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['external_ids']['twitter_id']"
+										},
+										"sink": {
+											"name": "twitter_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['media']['director']"
+										},
+										"sink": {
+											"name": "director",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "RestResource1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "api_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/RestResource1')]",
+				"[concat(variables('factoryId'), '/datasets/api_data')]"
 			]
 		},
 		{
@@ -544,6 +973,182 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/data_lake_param_container_level')]",
 				"[concat(variables('factoryId'), '/datasets/data_lake_param_file_level')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/deletefiles')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "data_lake_param_container_level",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_container": "adfrealtimestoragedestination"
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata1').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "Get Metadata2",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@greater(activity('Get Metadata2').output.lastModified,addDays(utcNow(),pipeline().parameters.p_last_7_days))",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "Delete1",
+												"type": "Delete",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"dataset": {
+														"referenceName": "data_lake_param_file_level",
+														"type": "DatasetReference",
+														"parameters": {
+															"p_container_name": "adfrealtimestoragedestination",
+															"p_file_name": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													},
+													"logStorageSettings": {
+														"linkedServiceName": {
+															"referenceName": "Linkservicedatalake",
+															"type": "LinkedServiceReference"
+														}
+													},
+													"enableLogging": true,
+													"storeSettings": {
+														"type": "AzureBlobFSReadSettings",
+														"recursive": true,
+														"modifiedDatetimeStart": null,
+														"modifiedDatetimeEnd": null,
+														"enablePartitionDiscovery": false
+													}
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "Get Metadata2",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "data_lake_param_container_level",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_container": {
+													"value": "adfrealtimestoragedestination",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"lastModified"
+										],
+										"storeSettings": {
+											"type": "AzureBlobFSReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "DelimitedTextReadSettings"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_last_7_days": {
+						"type": "int",
+						"defaultValue": -7
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/data_lake_param_container_level')]",
+				"[concat(variables('factoryId'), '/datasets/data_lake_param_file_level')]",
+				"[concat(variables('factoryId'), '/linkedServices/Linkservicedatalake')]"
 			]
 		},
 		{
@@ -1035,6 +1640,24 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/RestResource1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RestService1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/RestService1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Sale_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1079,6 +1702,33 @@
 						"type": "AzureBlobFSLocation",
 						"folderPath": "csvfile",
 						"fileSystem": "destination"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Linkservicedatalake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/api_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linkservicedatalake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "apidata"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -1387,6 +2037,21 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/RestService1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('RestService1_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Trigger_new_01')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -1564,180 +2229,6 @@
 				"[concat(variables('factoryId'), '/datasets/data_flow_csv')]",
 				"[concat(variables('factoryId'), '/datasets/sinkoutput_visa')]",
 				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/deletefiles')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Get Metadata1",
-						"type": "GetMetadata",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "data_lake_param_container_level",
-								"type": "DatasetReference",
-								"parameters": {
-									"p_container": "adfrealtimestoragedestination"
-								}
-							},
-							"fieldList": [
-								"childItems"
-							],
-							"storeSettings": {
-								"type": "AzureBlobFSReadSettings",
-								"enablePartitionDiscovery": false
-							},
-							"formatSettings": {
-								"type": "DelimitedTextReadSettings"
-							}
-						}
-					},
-					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Get Metadata1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Get Metadata1').output.childItems",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "If Condition1",
-									"type": "IfCondition",
-									"dependsOn": [
-										{
-											"activity": "Get Metadata2",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"expression": {
-											"value": "@greater(activity('Get Metadata2').output.lastModified,addDays(utcNow(),pipeline().parameters.p_last_7_days))",
-											"type": "Expression"
-										},
-										"ifTrueActivities": [
-											{
-												"name": "Delete1",
-												"type": "Delete",
-												"dependsOn": [],
-												"policy": {
-													"timeout": "0.12:00:00",
-													"retry": 0,
-													"retryIntervalInSeconds": 30,
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"dataset": {
-														"referenceName": "data_lake_param_file_level",
-														"type": "DatasetReference",
-														"parameters": {
-															"p_container_name": "adfrealtimestoragedestination",
-															"p_file_name": {
-																"value": "@item().name",
-																"type": "Expression"
-															}
-														}
-													},
-													"logStorageSettings": {
-														"linkedServiceName": {
-															"referenceName": "Linkservicedatalake",
-															"type": "LinkedServiceReference"
-														}
-													},
-													"enableLogging": true,
-													"storeSettings": {
-														"type": "AzureBlobFSReadSettings",
-														"recursive": true,
-														"modifiedDatetimeStart": null,
-														"modifiedDatetimeEnd": null,
-														"enablePartitionDiscovery": false
-													}
-												}
-											}
-										]
-									}
-								},
-								{
-									"name": "Get Metadata2",
-									"type": "GetMetadata",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataset": {
-											"referenceName": "data_lake_param_container_level",
-											"type": "DatasetReference",
-											"parameters": {
-												"p_container": {
-													"value": "adfrealtimestoragedestination",
-													"type": "Expression"
-												}
-											}
-										},
-										"fieldList": [
-											"lastModified"
-										],
-										"storeSettings": {
-											"type": "AzureBlobFSReadSettings",
-											"enablePartitionDiscovery": false
-										},
-										"formatSettings": {
-											"type": "DelimitedTextReadSettings"
-										}
-									}
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"p_last_7_days": {
-						"type": "int",
-						"defaultValue": -7
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/data_lake_param_container_level')]",
-				"[concat(variables('factoryId'), '/datasets/data_lake_param_file_level')]",
-				"[concat(variables('factoryId'), '/linkedServices/Linkservicedatalake')]"
 			]
 		}
 	]
